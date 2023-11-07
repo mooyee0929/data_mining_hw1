@@ -115,7 +115,7 @@ def runApriori(data_iter, minSupport, closed):
         return float(freqSet[item]) / len(transactionList)
     
     if not closed:
-        f = open('statistics file.txt',"w")
+        f = open('statistics_file.txt',"w")
         f.write(str(count)+'\n')
         toRetItems = []
         for key, value in largeSet.items():
@@ -129,7 +129,7 @@ def runApriori(data_iter, minSupport, closed):
         f.close()
         savetxt(toRetItems)
     else:
-        f = open('closed itemset list.txt',"w")
+        f = open('closed_itemset_list.txt',"w")
         f.write(str(closecount)+'\n')
         toRetItems = []
         for key, value in closeSet.items(): 
@@ -147,7 +147,7 @@ def printResults(items):
         print("item: %s , %.3f" % (str(item), support))
 
 def savetxt(items):
-    f = open('apriori itemset list.txt',"w")
+    f = open('apriori_itemset_list.txt',"w")
     """prints the generated itemsets sorted by support """
     for item, support in sorted(items, key=lambda x: x[1],reverse=True):
         f.write(str(round(support*100,1))+'\t'+str(item)+'\n')
