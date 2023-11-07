@@ -40,8 +40,7 @@ def returnItemsWithMinSupport(itemSet, transactionList, minSupport, freqSet):
     return _itemSet
 
 def returnCloesedItemsWithMinSupport(itemSet, superSet,minSupport,freqSet):
-    """calculates the support for items in the itemSet and returns a subset
-    of the itemSet each of whose elements satisfies the minimum support"""
+    """calculate the subset and check the support of each set """
     for supset in superSet:
         for item in itemSet:
             if item.issubset(supset) and freqSet[item] <= freqSet[supset]:
@@ -103,6 +102,7 @@ def runApriori(data_iter, minSupport, closed):
         if closed:
             closeSet[k-1] = returnCloesedItemsWithMinSupport(currentLSet,currentCSet,minSupport,freqSet)
             closecount += len(closeSet)
+        
         currentLSet = currentCSet
         count += len(currentLSet)
         
@@ -118,14 +118,16 @@ def runApriori(data_iter, minSupport, closed):
         f = open('statistics_file.txt',"w")
         f.write(str(count)+'\n')
         toRetItems = []
+        out = ""
         for key, value in largeSet.items():
             toRetItems.extend([(set(item), getSupport(item)) for item in value])
             if key < len(largeSet):
-                f.write(str(key) + '\t' + str(len(largeSet[key])) + '\t' + str(len(largeSet[key+1])) + '\n')
+                out += str(key) + '\t' + str(len(largeSet[key])) + '\t' + str(len(largeSet[key+1])) + '\n'
                 # print(str(key) + '\t' + str(len(largeSet[key])) + '\t' + str(len(largeSet[key+1])))
             else:
-                f.write(str(key) + '\t' + str(len(largeSet[key])) + '\t' + str(0) + '\n')
+                out += str(key) + '\t' + str(len(largeSet[key])) + '\t' + str(0) + '\n'
                 # print(str(key) + '\t' + str(len(largeSet[k])) + '\t' + str(0))
+        f.write(out)
         f.close()
         savetxt(toRetItems)
     else:
@@ -134,8 +136,10 @@ def runApriori(data_iter, minSupport, closed):
         toRetItems = []
         for key, value in closeSet.items(): 
             toRetItems.extend([(set(item), getSupport(item)) for item in value])
+        out = ""
         for item, support in sorted(toRetItems, key=lambda x: x[1],reverse=True):
-            f.write(str(support)+'\t'+str(item)+'\n')
+            out +=str(round(support*100,1))+'\t'+str(item)+'\n'
+        f.write(out)
         f.close()
     
     return toRetItems
@@ -149,8 +153,10 @@ def printResults(items):
 def savetxt(items):
     f = open('apriori_itemset_list.txt',"w")
     """prints the generated itemsets sorted by support """
+    out = ""
     for item, support in sorted(items, key=lambda x: x[1],reverse=True):
-        f.write(str(round(support*100,1))+'\t'+str(item)+'\n')
+        out += str(round(support*100,1))+'\t'+str(item)+'\n'
+    f.write(out)
     f.close()
 
 
