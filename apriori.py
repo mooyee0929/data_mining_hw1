@@ -147,7 +147,7 @@ def printResults(items):
         print("item: %s , %.3f" % (str(item), support))
 
 def savetxt(items):
-    f = open('itemset list.txt',"w")
+    f = open('apriori itemset list.txt',"w")
     """prints the generated itemsets sorted by support """
     for item, support in sorted(items, key=lambda x: x[1],reverse=True):
         f.write(str(round(support*100,1))+'\t'+str(item)+'\n')
